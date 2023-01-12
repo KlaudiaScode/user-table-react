@@ -1,5 +1,62 @@
 import React from 'react';
 import './App.css';
+import TableHeader from './components/TableHeader';
+import TableCell from './components/TableCell';
+
+const tableHeaders = [
+  'Surname',
+  'Name',
+  'Gender',
+  'Nationality',
+  'Profession',
+  'Marital status'
+]
+const users = [
+  {
+    id: 1,
+    name:{
+      first: 'Karolina',
+      last: 'Nowak'
+    },
+    gender: 'female',
+    nationality: 'PL',
+    profession: 'actor',
+    maritalStatus: 'married'
+  },
+  {
+    id: 2,
+    name:{
+      first: 'Tom',
+      last: 'Gonzales'
+    },
+    gender: 'male',
+    nationality: 'DE',
+    profession: 'fotballer',
+    maritalStatus: 'divorced'
+  },
+  {
+    id: 3,
+    name:{
+      first: 'Rose',
+      last: 'Walters'
+    },
+    gender: 'female',
+    nationality: 'FR',
+    profession: 'cook',
+    maritalStatus: 'widow'
+  },
+  {
+    id: 4,
+    name:{
+      first: 'Adam',
+      last: 'Smasher'
+    },
+    gender: 'male',
+    nationality: 'UE',
+    profession: 'soldier',
+    maritalStatus: 'married'
+  }
+]
 
 function App() {
   return (
@@ -7,47 +64,21 @@ function App() {
          <table>
                <thead>
                   <tr>
-                     <th>Surname</th> 
-                     <th>Name</th> 
-                     <th>Gender</th> 
-                     <th>Nationality</th> 
-                     <th>Profession</th> 
-                     <th>Marital status</th>
+                    {tableHeaders.map((headerName)=><TableHeader headerText={headerName} />)}
                   </tr>
                </thead>
                <tbody>
-                <tr>
-                  <td>Nowak</td>
-                  <td>Karolina</td>
-                  <td>Female</td>
-                  <td>PL</td>
-                  <td>Actor</td>
-                  <td>Married</td>
+                {users.map((user)=>(
+                  <tr key={user.id}>
+                  <TableCell data={user.name.last} />
+                  <TableCell data={user.name.first} />
+                  <TableCell data={user.gender} />
+                  <TableCell data={user.nationality} />
+                  <TableCell data={user.profession} />
+                  <TableCell data={user.maritalStatus} />
                 </tr>
-                <tr>
-                  <td>Gonzales</td>
-                  <td>Tom</td>
-                  <td>Male</td>
-                  <td>DE</td>
-                  <td>Footballer</td>
-                  <td>Divorced</td>
-                </tr>
-                <tr>
-                  <td>Walters</td>
-                  <td>Rose</td>
-                  <td>Female</td>
-                  <td>FR</td>
-                  <td>Cook</td>
-                  <td>Widow</td>
-                </tr>
-                <tr>
-                  <td>King</td>
-                  <td>Adam</td>
-                  <td>Male</td>
-                  <td>UE</td>
-                  <td>Soldier</td>
-                  <td>Married</td>
-                </tr>
+                ))}
+                
                </tbody>
             </table>
     </div>
