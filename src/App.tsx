@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import TableHeader from './components/TableHeader';
-import TableCell from './components/TableCell';
+import DataTable from './components/DataTable';
+import ButtonValue from './components/ButtonValue';
+
 
 const tableHeaders = [
   'Surname',
@@ -59,30 +60,13 @@ const users = [
 ]
 
 function App() {
-  return (
+    return (
     <div className="App">
-         <table>
-               <thead>
-                  <tr>
-                    {tableHeaders.map((headerName)=><TableHeader headerText={headerName} />)}
-                  </tr>
-               </thead>
-               <tbody>
-                {users.map((user)=>(
-                  <tr key={user.id}>
-                  <TableCell data={user.name.last} />
-                  <TableCell data={user.name.first} />
-                  <TableCell data={user.gender} />
-                  <TableCell data={user.nationality} />
-                  <TableCell data={user.profession} />
-                  <TableCell data={user.maritalStatus} />
-                </tr>
-                ))}
-                
-               </tbody>
-            </table>
+      <div>
+      <ButtonValue />
+      </div>
+        <DataTable headers={tableHeaders} users={users}/>
     </div>
   );
 }
-
 export default App;
