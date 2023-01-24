@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import DataTable from './components/DataTable';
 import ButtonValue from './components/ButtonValue';
+import { useFetchUsers } from './hooks';
 
 
 const tableHeaders = [
@@ -9,8 +10,8 @@ const tableHeaders = [
   'Name',
   'Gender',
   'Nationality',
-  'Profession',
-  'Marital status'
+  'Age',
+  'Location'
 ]
 const users = [
   {
@@ -60,7 +61,7 @@ const users = [
 ]
 
 function App() {
-  const [userData, setUserData] = useState(users);
+ /* const [userData, setUserData] = useState(users);
   const mounted = React.useRef(false);
   
   useEffect(()=>{
@@ -94,8 +95,9 @@ function App() {
     }else{
       mounted.current = true;
     }
-  },[userData])
+  },[userData])*/
 
+  const {userData} = useFetchUsers();
     return (
     <div className="App">
       <div>
@@ -106,6 +108,3 @@ function App() {
   );
 }
 export default App;
-
-//NOTATKA I PRZYKŁADY Z UŻYCIA setTimeout()
-//Notatka o useRef()

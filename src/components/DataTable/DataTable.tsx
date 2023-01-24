@@ -8,9 +8,17 @@ export interface User {
     last: string;
   };
   gender: string;
-  nationality: string;
-  profession: string;
-  maritalStatus: string;
+  nat: string;
+  dob: {
+    age: number;
+  };
+  location:{
+    state: string;
+    country: string;
+  };
+  login: {
+    uuid: string;
+  };
 }
 
 export interface DataTableProps {
@@ -28,13 +36,13 @@ export default function DataTable(props: DataTableProps){
       </thead>
       <tbody>
         {props.users.map((user)=>(
-          <tr key={user.id}>
+          <tr key={user.login.uuid}>
             <TableCell data={user.name.last} />
             <TableCell data={user.name.first} />
             <TableCell data={user.gender} />
-            <TableCell data={user.nationality} />
-            <TableCell data={user.profession} />
-            <TableCell data={user.maritalStatus} />
+            <TableCell data={user.nat} />
+            <TableCell data={user.dob.age} />
+            <TableCell data={user.location.country} />
           </tr>
         ))}
       </tbody>
