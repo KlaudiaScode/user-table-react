@@ -1,25 +1,6 @@
+import { User } from "../../types";
 import TableCell from "../TableCell";
 import TableHeader from "../TableHeader";
-
-export interface User {
-  id: number | string;
-  name: {
-    first: string;
-    last: string;
-  };
-  gender: string;
-  nat: string;
-  dob: {
-    age: number;
-  };
-  location:{
-    state: string;
-    country: string;
-  };
-  login: {
-    uuid: string;
-  };
-}
 
 export interface DataTableProps {
   headers: string[],
