@@ -30,47 +30,38 @@ const userData = [
 ]
 //stworzenie dwóch ogólnodostępnych zmiennych z danymi
 
-describe('userReducer function', ()=>{
-    it('should return state if not known action type was passed', ()=>{
-        const action = { type: 'xyz' };
-        expect(userReducer(state, action)).toEqual(state)
-    })
-    //testowanie funkcji userReducer w przypadku kiedy typ akcji jest nieznany, oczekiwane zwrócenie stanu początkowego
+const useCases = [
+    [   'state if not known action type was passed',
+        state, { type: 'xyz' }, state],
+    [   'proper state on action failure',
+        state, { type: 'failure', text: 'error text' }, {
+        loading: false,
+        errorText: 'error text',
+        data: [] 
+    }],
+    [   'proper state on action success',
+        { ...state, loading: true }, { type: 'success', data: userData }, {
+        loading: false,
+        errorText: '',
+        data: userData
+    }],
+    [   'proper state on action loading',
+        state, { type:'loading' }, {
+        loading: true,
+        errorText: '',
+        data: []
+    }]
+]
 
-    it('should return proper state on action failure', ()=>{
-        const action = { type: 'failure', text: 'error text' };
-        const expectedValue = {
-            loading: false,
-            errorText: 'error text',
-            data: [] 
-        }
-        expect(userReducer(state, action)).toStrictEqual(expectedValue)
+describe('userReducer function',()=>{
+    it.each(useCases)('should return %s', (description, state, action, expected)=>{
+       expect(userReducer(state, action)).toEqual(expected)
     })
-    // testowanie funkcji userReducer w przypadku kiedy typem akcji jest niepowodzenie(ang.failure),
-    // oczekiwane zwrócenie konkretnych wartości wymienionych w zmiennej expectedValue
-
-    it('should return proper state on action success', ()=>{
-        const localState = { ...state, loading: true };
-        const action = { type: 'success', data: userData };
-        const expectedValue = {
-            loading: false,
-            errorText: '',
-            data: userData
-        };
-        expect (userReducer(localState, action)).toStrictEqual(expectedValue)
-    })
-     // testowanie funkcji userReducer w przypadku kiedy typem akcji jest sukces(ang.success), 
-     //oczekiwane zwrócenie konkretnych wartości wymienionych w zmiennej expectedValue
-
-    it('should return proper state on action loading',()=>{
-        const action = { type:'loading' };
-        const expectedValue = {
-            loading: true,
-            errorText: '',
-            data: []
-        };
-        expect (userReducer(state, action)).toStrictEqual(expectedValue)
-    })
-     // testowanie funkcji userReducer w przypadku kiedy typem akcji jest ładowanie(ang.loading),
-     // oczekiwane zwrócenie konkretnych wartości wymienionych w zmiennej expectedValue
+  //  useCases.forEach((useCase)=>{
+  //      it('should return ' + useCase[0], ()=>{
+   //         expect(userReducer(useCase[1], useCase[2])).toEqual(useCase[3])
+  //      })
+  // })
 })
+//PD: Jak naprawić podkreślone parametry w ts
+//PD: commit
