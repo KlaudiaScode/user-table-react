@@ -1,8 +1,14 @@
 import { render } from "@testing-library/react";
-import { userReducer } from "./hooks";
-//importowanie potrzebnych {imiennych}plików
+import { userReducer, UserAction, UsersState } from "./hooks";
 
-const state = {
+export type UseCase = [
+  string,
+  UsersState,
+  UserAction,
+  UsersState
+]
+
+const state: UsersState = {
     loading: false,
     errorText: '',
     data: []
@@ -28,9 +34,8 @@ const userData = [
           },
     }
 ]
-//stworzenie dwóch ogólnodostępnych zmiennych z danymi
 
-const useCases = [
+const useCases: UseCase[] = [
     [   'state if not known action type was passed',
         state, { type: 'xyz' }, state],
     [   'proper state on action failure',
@@ -54,7 +59,7 @@ const useCases = [
 ]
 
 describe('userReducer function',()=>{
-    it.each(useCases)('should return %s', (description, state, action, expected)=>{
+    it.each(useCases)('should return %s', (description: string, state: UsersState, action: UserAction, expected: UsersState)=>{
        expect(userReducer(state, action)).toEqual(expected)
     })
   //  useCases.forEach((useCase)=>{
@@ -63,5 +68,3 @@ describe('userReducer function',()=>{
   //      })
   // })
 })
-//PD: Jak naprawić podkreślone parametry w ts
-//PD: commit
