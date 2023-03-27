@@ -51,7 +51,6 @@ export function userReducer(state: UsersState, action: UserAction){
         default: 
             return state;
     }
-    return state;
 }
 
 export function useFetchUsers2(): UsersState{
@@ -59,12 +58,15 @@ export function useFetchUsers2(): UsersState{
 
     useEffect(()=>{
         dispatch({ type: 'loading' });
-        fetch('https://randomuser2.me/api/?results=50&inc=name,gender,nat,dob,location,login')
+        console.log('request');
+        fetch('https://randomuser.me/api/?results=50&inc=name,gender,nat,dob,location,login')
         .then(async (response)=>{
             if(response.ok){
                 const data = await response.json();
-            dispatch({type: 'success', data: data.results})
+                dispatch({type: 'success', data: data.results})
+                return
             }
+            throw new Error('Something went wrong');
         })
         .catch((error)=>{
             dispatch({type: 'failure', text: error.message})
@@ -74,33 +76,33 @@ export function useFetchUsers2(): UsersState{
     return userState;
 }
 
-export function useFetchUsers(){
-    const [userData, setUserData] = useState<User[]>([])
-    const [errorText, setErrorText] = useState<string>('')
-    const [loading, setLoading] = useState<boolean>(false)
+// export function useFetchUsers(){
+//     const [userData, setUserData] = useState<User[]>([])
+//     const [errorText, setErrorText] = useState<string>('')
+//     const [loading, setLoading] = useState<boolean>(false)
 
-    useEffect(()=>{
-        setLoading(true);
-        fetch('https://randomuser.me/api/?results=50&inc=name,gender,nat,dob,location,login')
-        .then(async (response)=>{
-            if(response.ok){
-                const data = await response.json();
-                console.log(data);
-                setUserData(data.results);
-                setErrorText('');
-                setLoading(false);
-            }
-        })
-        .catch((error)=>{
-            console.log(error);
-            setErrorText(error.message);
-            setLoading(false);
-        })
-    },[])
+//     useEffect(()=>{
+//         setLoading(true);
+//         fetch('https://randomuser.me/api/?results=50&inc=name,gender,nat,dob,location,login')
+//         .then(async (response)=>{
+//             if(response.ok){
+//                 const data = await response.json();
+//                 console.log(data);
+//                 setUserData(data.results);
+//                 setErrorText('');
+//                 setLoading(false);
+//             }
+//         })
+//         .catch((error)=>{
+//             console.log(error);
+//             setErrorText(error.message);
+//             setLoading(false);
+//         })
+//     },[])
     
-    return {
-        userData,
-        errorText,
-        loading
-    }
-}
+//     return {
+//         userData,
+//         errorText,
+//         loading
+//     }
+// }

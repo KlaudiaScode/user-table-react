@@ -1,62 +1,7 @@
-import { render } from "@testing-library/react";
-import { userReducer, UserAction, UsersState } from "./hooks";
+import { renderHook, waitFor } from "@testing-library/react";
+import { userReducer, UserAction, UsersState, useFetchUsers2 } from "./hooks";
+import { useCases, userData } from "./testHelper";
 
-export type UseCase = [
-  string,
-  UsersState,
-  UserAction,
-  UsersState
-]
-
-const state: UsersState = {
-    loading: false,
-    errorText: '',
-    data: []
-}
-
-const userData = [
-    {
-        name: {
-            first: 'Klaudia',
-            last: 'Sagan',
-          },
-          gender: 'Kobieta',
-          nat: 'Polska',
-          dob: {
-            age: 25,
-          },
-          location:{
-            state: 'Lubelskie',
-            country: 'Polska',
-          },
-          login: {
-            uuid: '123',
-          },
-    }
-]
-
-const useCases: UseCase[] = [
-    [   'state if not known action type was passed',
-        state, { type: 'xyz' }, state],
-    [   'proper state on action failure',
-        state, { type: 'failure', text: 'error text' }, {
-        loading: false,
-        errorText: 'error text',
-        data: [] 
-    }],
-    [   'proper state on action success',
-        { ...state, loading: true }, { type: 'success', data: userData }, {
-        loading: false,
-        errorText: '',
-        data: userData
-    }],
-    [   'proper state on action loading',
-        state, { type:'loading' }, {
-        loading: true,
-        errorText: '',
-        data: []
-    }]
-]
 
 describe('userReducer function',()=>{
     it.each(useCases)('should return %s', (description: string, state: UsersState, action: UserAction, expected: UsersState)=>{
@@ -68,3 +13,38 @@ describe('userReducer function',()=>{
   //      })
   // })
 })
+//mokowanie globalnej funkcji śledzącej o nazwie fetch
+jest.spyOn(global,'fetch');
+
+describe('useFetchUsers2 hook',()=>{
+  it('should return loading true when hook is rendered',()=>{
+    global.fetch = jest.fn((): Promise<Response>=>Promise.resolve({}as unknown as Response));
+    const {result} = renderHook(()=>useFetchUsers2());
+
+    expect(result.current.loading).toBe(true);
+  })
+  it('should return correct data',async()=>{
+    global.fetch = jest.fn((): Promise<Response>=>Promise.resolve({
+      ok: true,
+      json: ()=>Promise.resolve({
+        results: userData,
+      })
+    } as unknown as Response))
+    const {result} = renderHook(()=>useFetchUsers2())
+
+    expect(result.current.data).toHaveLength(0)
+    await waitFor(()=>expect (result.current.loading).toBe(false))
+    expect(result.current.data).toHaveLength(1)
+  })
+  it('should return error message',async()=>{
+    const error = new Error('Failed');
+    global.fetch = jest.fn((): Promise<Response>=>Promise.reject(error as unknown as Response));
+    const {result} = renderHook(()=>useFetchUsers2());
+
+    expect(result.current.errorText).toBe('')
+    await waitFor(()=>expect (result.current.loading).toBe(false))
+    expect(result.current.errorText).toBe('Failed')
+  })
+})
+
+//Przeanalizować fetch w kodzie i w jaki sposób został zamokowany w testach
