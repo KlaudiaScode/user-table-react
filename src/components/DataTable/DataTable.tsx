@@ -5,7 +5,7 @@ import TableHeader from "../TableHeader";
 export interface DataTableProps {
   headers: string[],
   users: User []
-}
+};
 
 export default function DataTable(props: DataTableProps){
   return (
@@ -28,5 +28,5 @@ export default function DataTable(props: DataTableProps){
         ))}
       </tbody>
     </table>
-  )
-}
+  );
+};
